@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.stats
 
 x1min = -30
 x1max = 20
@@ -135,6 +136,7 @@ f2 = N = len(x_matrix)
 q = 0.05
 # для q = 0.05, f1 = 2, f2 = 4, Gt = 0.7679
 Gt = 0.7679
+
 if Gp < Gt:
     print("Дисперсія однорідна")
 else:
@@ -160,8 +162,10 @@ t2 = abs(beta2)/Sbeta
 t3 = abs(beta3)/Sbeta
 
 f3 = f1*f2
-t_tab = 2.306  # для значення f3 = 8, t табличне = 2,306
-print(t0, t1,t2,t3)
+# t_tab = 2.306  # для значення f3 = 8, t табличне = 2,306
+# print("T_tab:", t_tab)
+t_tab = scipy.stats.t.ppf((1 + (1-q))/2, f3)
+print("t табличное:", t_tab)
 if t0 < t_tab:
     b0 = 0
     print("t0<t_tab; b0=0")
@@ -196,7 +200,10 @@ f4 = N - d
 
 S2_ad = (m/(N-d))*((y1_hat-my1)**2 + (y2_hat-my2)**2 + (y3_hat-my3)**2 + (y4_hat-my4)**2)
 Fp = S2_ad/S2B
-Ft = 4.5  # для f3=8; f4=2
+# Ft = 4.5  # для f3=8; f4=2
+Ft = scipy.stats.f.ppf(1-q, f4, f3)
+print("Fp:", Fp)
+print("Ft:", Ft)
 if Fp > Ft:
     print("Рівняння регресії не адекватно оригіналу при рівні значимості 0,05")
 else:
